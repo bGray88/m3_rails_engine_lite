@@ -6,7 +6,11 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def show
-    render json: MerchantSerializer.format_merchant(@merchant)
+    if @merchant
+      render json: MerchantSerializer.format_merchant(@merchant)
+    else
+      render json: :no_content, status: :not_found
+    end
   end
 
   private
