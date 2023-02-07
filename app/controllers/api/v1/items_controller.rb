@@ -1,51 +1,35 @@
 class Api::V1::ItemsController < ApplicationController
+  before_action :find_merchant_and_item, only: [:update]
+  before_action :find_item, only: [:show, :destroy]
+
   def index
-    if params[:merchant_id]
-      if Merchant.find_by(id: params[:merchant_id])
-        merchant = Merchant.find(params[:merchant_id])
-        render json: ItemSerializer.format_items(merchant.items)
-      else
-        render json: :no_content, status: :not_found
-      end
-    else
-      render json: ItemSerializer.format_items(Item.all)
-    end
+    render json: ItemSerializer.format_items(Item.all)
   end
 
   def show
-    render json: ItemSerializer.format_item(Item.find(params[:id]))
+    render json: ItemSerializer.format_item(@item)
   end
 
   def create
     item = Item.new(item_params)
     if item.save
       render json: ItemSerializer.format_item(Item.last), status: :created
+    else
+      render json: :no_content, status: :conflict
     end
   end
 
   def update
-    if params[:merchant_id]
-      if Merchant.find_by(id: params[:merchant_id])
-        if Item.update(params[:id], item_params)
-          render json: ItemSerializer.format_item(Item.find(params[:id])), status: :ok
-        else
-          render json: :no_content, status: :not_found
-        end
-      else
-        render json: :no_content, status: :not_found
-      end
+    if @item && item_params[:merchant_id].nil? || @item && @merchant
+      Item.update(@item.id, item_params)
+      render json: ItemSerializer.format_item(Item.find_by(id: @item.id)), status: :ok
     else
-      if Item.update(params[:id], item_params)
-        render json: ItemSerializer.format_item(Item.find(params[:id])), status: :ok
-      else
-        render json: :no_content, status: :not_found
-      end
+      render json: :no_content, status: :not_found
     end
   end
 
   def destroy
-    item = Item.find(params[:id])
-    if item.destroy
+    if @item.destroy
       render json: :no_content, status: :ok
     end
   end
@@ -59,5 +43,14 @@ class Api::V1::ItemsController < ApplicationController
       :unit_price,
       :merchant_id
     )
+  end
+
+  def find_item
+    @item = Item.find(params[:id])
+  end
+
+  def find_merchant_and_item
+    @merchant = Merchant.find_by(id: params[:merchant_id])
+    @item     = Item.find_by(id: params[:id])
   end
 end

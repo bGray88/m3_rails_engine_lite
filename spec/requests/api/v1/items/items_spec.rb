@@ -87,10 +87,9 @@ RSpec.describe 'Merchant Items API' do
   it "can update an existing item" do
     id = create(:item, name: "Hungry Man Deluxe").id
     previous_name = Item.last.name
-    item_param_name = { name: "Hungry Man Excessive" }
     headers = { "CONTENT_TYPE" => "application/json" }
 
-    patch api_v1_item_path(id), headers: headers, params: JSON.generate({item: item_param_name})
+    patch api_v1_item_path(id), headers: headers, params: JSON.generate({ name: "Hungry Man Excessive" })
     item = Item.find_by(id: id)
 
     expect(response).to be_successful
@@ -104,7 +103,7 @@ RSpec.describe 'Merchant Items API' do
 
   it "can destroy an item" do
     Item.delete_all
-    
+
     item1 = create(:item)
     expect(Item.count).to eq(1)
 
