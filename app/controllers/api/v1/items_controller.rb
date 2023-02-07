@@ -13,7 +13,24 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def create
-    render json: ItemSerializer.format_item(Item.create(item_params)), status: :created
+    item = Item.new(item_params)
+    if item.save
+      render json: ItemSerializer.format_item(Item.last), status: :created
+    end
+  end
+
+  def update
+    item = Item.find(params[:id])
+    if item.update(item_params)
+      render json: ItemSerializer.format_item(Item.update(params[:id], item_params)), status: :ok
+    end
+  end
+
+  def destroy
+    item = Item.find(params[:id])
+    if item.destroy
+      render json: :no_content, status: :ok
+    end
   end
 
   private
