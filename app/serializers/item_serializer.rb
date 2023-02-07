@@ -15,4 +15,20 @@ class ItemSerializer
       end
     }
   end
+
+  def self.format_item(item)
+    {
+      data:
+        {
+          id: item.id.to_s,
+          type: item.class.to_s.downcase,
+          attributes: {
+            name: item.name,
+            description: item.description,
+            unit_price: item.unit_price.to_f,
+            merchant_id: item.merchant_id
+          }
+        }
+    }
+  end
 end
