@@ -30,5 +30,13 @@ RSpec.describe 'Items Find API' do
 
     expect(response).to be_successful
     expect(item[:attributes][:name]).to eq('Dingo')
+
+    get api_v1_items_find_path(name: '')
+
+    expect(response.status).to eq(400)
+
+    get api_v1_items_find_path
+
+    expect(response.status).to eq(400)
   end
 end
