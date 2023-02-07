@@ -7,7 +7,11 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def show
-    render json: ItemSerializer.format_item(@item)
+    if @item
+      render json: ItemSerializer.format_item(@item)
+    else
+      render json: :no_content, status: :not_found
+    end
   end
 
   def create
