@@ -33,9 +33,7 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def destroy
-    if @item.destroy
-      render json: :no_content, status: :ok
-    end
+    @item.destroy
   end
 
   private
