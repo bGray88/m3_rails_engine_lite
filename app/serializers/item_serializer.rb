@@ -8,7 +8,7 @@ class ItemSerializer
           attributes: {
             name: item.name,
             description: item.description,
-            unit_price: item.unit_price.to_f,
+            unit_price: item.unit_price,
             merchant_id: item.merchant_id
           }
         }
@@ -25,7 +25,7 @@ class ItemSerializer
           attributes: {
             name: item.name,
             description: item.description,
-            unit_price: item.unit_price.to_f,
+            unit_price: item.unit_price,
             merchant_id: item.merchant_id
           }
         }

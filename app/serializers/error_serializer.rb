@@ -7,4 +7,13 @@ class ErrorSerializer
         }
     }
   end
+
+  def self.error_merchant_search
+    {
+      data:
+        {
+          message: "merchant search yields no results"
+        }
+    }
+  end
 end
