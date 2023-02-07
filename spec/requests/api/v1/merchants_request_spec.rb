@@ -31,7 +31,7 @@ RSpec.describe 'Merchant API' do
     end
   end
 
-  it 'gets a single merchant' do
+  it 'sends a single merchant' do
     get api_v1_merchant_path(@merchant1)
 
     merchant = JSON.parse(response.body, symbolize_names: true)[:data]
