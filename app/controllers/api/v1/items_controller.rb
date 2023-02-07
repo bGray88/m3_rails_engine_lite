@@ -1,8 +1,12 @@
 class Api::V1::ItemsController < ApplicationController
   def index
     if params[:merchant_id]
-      merchant = Merchant.find(params[:merchant_id])
-      render json: ItemSerializer.format_items(merchant.items)
+      if Merchant.find_by(id: params[:merchant_id])
+        merchant = Merchant.find(params[:merchant_id])
+        render json: ItemSerializer.format_items(merchant.items)
+      else
+        render json: :no_content, status: :not_found
+      end
     else
       render json: ItemSerializer.format_items(Item.all)
     end
@@ -20,9 +24,22 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def update
-    item = Item.find(params[:id])
-    if item.update(item_params)
-      render json: ItemSerializer.format_item(Item.update(params[:id], item_params)), status: :ok
+    if params[:merchant_id]
+      if Merchant.find_by(id: params[:merchant_id])
+        if Item.update(params[:id], item_params)
+          render json: ItemSerializer.format_item(Item.find(params[:id])), status: :ok
+        else
+          render json: :no_content, status: :not_found
+        end
+      else
+        render json: :no_content, status: :not_found
+      end
+    else
+      if Item.update(params[:id], item_params)
+        render json: ItemSerializer.format_item(Item.find(params[:id])), status: :ok
+      else
+        render json: :no_content, status: :not_found
+      end
     end
   end
 
