@@ -5,7 +5,7 @@ class Api::V1::ItemMerchantsController < ApplicationController
     if @item
       render json: MerchantSerializer.format_merchant(@item.merchant)
     else
-      render json: :no_content, status: :not_found
+      render json: ErrorSerializer.errors_all([:no_content]), status: :not_found
     end
   end
 

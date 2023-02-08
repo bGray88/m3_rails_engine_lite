@@ -22,7 +22,7 @@ module Find
     if item
       render json: ItemSerializer.format_item(item)
     else
-      render json: ErrorSerializer.error_search('item')
+      render json: ItemSerializer.format_empty
     end
   end
 end

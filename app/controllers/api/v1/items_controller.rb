@@ -10,7 +10,7 @@ class Api::V1::ItemsController < ApplicationController
     if @item
       render json: ItemSerializer.format_item(@item)
     else
-      render json: :no_content, status: :not_found
+      render json: ErrorSerializer.errors_all([:no_content]), status: :not_found
     end
   end
 
@@ -19,7 +19,7 @@ class Api::V1::ItemsController < ApplicationController
     if item.save
       render json: ItemSerializer.format_item(Item.last), status: :created
     else
-      render json: :no_content, status: :conflict
+      render json: ErrorSerializer.errors_all([:no_content]), status: :conflict
     end
   end
 
@@ -28,7 +28,7 @@ class Api::V1::ItemsController < ApplicationController
       Item.update(@item.id, item_params)
       render json: ItemSerializer.format_item(Item.find_by(id: @item.id)), status: :ok
     else
-      render json: :no_content, status: :not_found
+      render json: ErrorSerializer.errors_all([:no_content]), status: :not_found
     end
   end
 

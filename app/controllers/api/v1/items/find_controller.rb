@@ -2,6 +2,6 @@ class Api::V1::Items::FindController < ApplicationController
   include Find
 
   def show
-    render json: { errors: 'Missing required parameters' }, status: :bad_request
+    render json: ErrorSerializer.error_search('item'), status: :bad_request
   end
 end
