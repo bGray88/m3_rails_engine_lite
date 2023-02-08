@@ -3,7 +3,7 @@ class Api::V1::Merchants::FindAllController < ApplicationController
     if !params.has_key?(:name) || params[:name].empty?
       render json: :no_content, status: :bad_request
     else
-      merchants = Merchant.find_merchants(params[:name])
+      merchants = Merchant.find_merchants_by_name(params[:name])
       if merchants
         render json: MerchantSerializer.format_merchants(merchants)
       else
