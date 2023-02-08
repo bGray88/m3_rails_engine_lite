@@ -12,7 +12,7 @@ RSpec.describe 'Items Find API' do
   it 'sends a list of a merchant\'s items' do
     get api_v1_merchants_find_all_path(name: 'bob')
     merchants = JSON.parse(response.body, symbolize_names: true)[:data]
-    
+
     expect(response).to be_successful
     expect(merchants[0][:attributes][:name]).to eq('Bob Bobbington')
 

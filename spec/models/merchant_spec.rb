@@ -20,11 +20,11 @@ RSpec.describe Merchant, type: :model do
 
     describe '#find_merchants' do
       it 'returns first all matches for a case-insensitive alphabetical search ' do
-        expect(Merchant.find_merchants('ton').length).to eq(4)
-        expect(Merchant.find_merchants('ton')[0][:name]).to eq('Bill Billington')
-        expect(Merchant.find_merchants('ton').last[:name]).to eq('Sal Sallington')
-        expect(Merchant.find_merchants('on').length).to eq(5)
-        expect(Merchant.find_merchants('on')[2][:name]).to eq('Frances Bacon')
+        expect(Merchant.find_merchants_by_name('ton').length).to eq(4)
+        expect(Merchant.find_merchants_by_name('ton')[0][:name]).to eq('Bill Billington')
+        expect(Merchant.find_merchants_by_name('ton').last[:name]).to eq('Sal Sallington')
+        expect(Merchant.find_merchants_by_name('on').length).to eq(5)
+        expect(Merchant.find_merchants_by_name('on')[2][:name]).to eq('Frances Bacon')
       end
     end
   end
