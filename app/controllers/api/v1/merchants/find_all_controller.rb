@@ -7,7 +7,7 @@ class Api::V1::Merchants::FindAllController < ApplicationController
       if merchants
         render json: MerchantSerializer.format_merchants(merchants)
       else
-        render json: ErrorSerializer.error_merchant_search
+        render json: ErrorSerializer.error_search('merchant')
       end
     end
   end
