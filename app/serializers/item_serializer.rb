@@ -31,4 +31,11 @@ class ItemSerializer
         }
     }
   end
+
+  def self.format_empty
+    {
+      data:
+        {}
+    }
+  end
 end

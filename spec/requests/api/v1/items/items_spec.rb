@@ -97,8 +97,8 @@ RSpec.describe 'Merchant Items API' do
     expect(item.name).to eq("Hungry Man Excessive")
   end
 
-  it 'can return an item\'s merchant' do
-    
+  xit 'can return an item\'s merchant' do
+    # TODO
   end
 
   it "can destroy an item" do

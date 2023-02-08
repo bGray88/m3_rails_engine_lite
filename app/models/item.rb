@@ -11,7 +11,6 @@ class Item < ApplicationRecord
   end
 
   def self.find_item_by_price(search_range, direction)
-    where(unit_price: search_range).order(unit_price: direction).limit(1).first
-    # where(name: 'Item A Error').limit(1).first
+    where(unit_price: search_range).order(name: direction).limit(1).first
   end
 end

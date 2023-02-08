@@ -25,4 +25,11 @@ class MerchantSerializer
         }
     }
   end
+
+  def self.format_empty
+    {
+      data:
+        {}
+    }
+  end
 end
