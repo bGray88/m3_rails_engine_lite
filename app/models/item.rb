@@ -1,10 +1,13 @@
 class Item < ApplicationRecord
-  belongs_to :merchant
 
   validates_presence_of :name,
                         :description,
                         :unit_price,
                         :merchant_id
+
+  belongs_to :merchant
+  has_many :invoice_items, dependent: :delete_all
+  has_many :invoices, through: :invoice_items
 
   def self.find_item_by_name(search_term)
     where("lower(name) LIKE ?", "%#{search_term.downcase}%").order(name: :asc).limit(1).first

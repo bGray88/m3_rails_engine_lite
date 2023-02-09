@@ -11,7 +11,7 @@ class ErrorSerializer
   def self.errors_all(errors)
     {
       message: 'your action could not be completed',
-        errors: 
+        errors:
           errors.map do |error|
             error
           end
