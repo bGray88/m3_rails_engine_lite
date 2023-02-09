@@ -33,6 +33,7 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def destroy
+    Invoice.delete_empties(@item.invoices)
     @item.destroy
   end
 
