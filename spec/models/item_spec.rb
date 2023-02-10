@@ -36,9 +36,9 @@ RSpec.describe Item, type: :model do
 
     describe '#find_item_by_price' do
       it 'returns first element of a numerical search ' do
-        expect(Item.find_item_by_price(10..15.00, :asc)[:name]).to eq('Banana')
-        expect(Item.find_item_by_price(20..35.00, :desc)[:name]).to eq('Dingo')
-        expect(Item.find_item_by_price(0..70.00, :asc)[:name]).to eq('Asparagus')
+        expect(Item.find_item_by_price({ range: 10..15.00, direction: :asc })[:name]).to eq('Banana')
+        expect(Item.find_item_by_price({ range: 20..35.00, direction: :desc })[:name]).to eq('Dingo')
+        expect(Item.find_item_by_price({ range: 0..70.00, direction: :asc })[:name]).to eq('Asparagus')
       end
     end
   end
