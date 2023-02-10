@@ -5,7 +5,6 @@ rescue LoadError
 end
 
 if defined? Hirb
-  # Slightly dirty hack to fully support in-session Hirb.disable/enable toggling
   Hirb::View.instance_eval do
     def enable_output_method
       @output_method = true
