@@ -12,11 +12,12 @@ RSpec.describe 'Merchant API' do
   it 'sends a list of merchants' do
     get api_v1_merchants_path
 
-    merchants = JSON.parse(response.body, symbolize_names: true)
+    merchants_list = JSON.parse(response.body, symbolize_names: true)[:data]
+    merchants_array = [@merchant1, @merchant2, @merchant3, @merchant4, @merchant5]
 
     expect(response).to be_successful
-    expect(merchants[:data].length).to eq(5)
-    merchants[:data].each do |merchant|
+    expect(merchants_list.length).to eq(5)
+    merchants_list.each_with_index do |merchant, index|
       expect(merchant).to have_key(:id)
       expect(merchant[:id]).to be_a(String)
 
@@ -28,6 +29,8 @@ RSpec.describe 'Merchant API' do
 
       expect(merchant[:attributes]).to have_key(:name)
       expect(merchant[:attributes][:name]).to be_a(String)
+
+      expect(merchant[:attributes][:name]).to eq(merchants_array[index].name)
     end
   end
 
@@ -48,5 +51,7 @@ RSpec.describe 'Merchant API' do
 
     expect(merchant[:attributes]).to have_key(:name)
     expect(merchant[:attributes][:name]).to be_a(String)
+
+    expect(merchant[:attributes][:name]).to eq(@merchant1.name)
   end
 end
