@@ -1,7 +1,7 @@
 module Find
   def bad_params?(key)
     !params.key?(key) || params[key].empty? ||
-      params[key].to_i < 0 || params[key].to_i < 0
+      params[key].to_i.negative? || params[key].to_i.negative?
   end
 
   def invalid_price_range?(min, max)
