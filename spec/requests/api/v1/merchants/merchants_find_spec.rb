@@ -9,17 +9,20 @@ RSpec.describe 'Merchants Find API' do
     @merchant5 = create(:merchant, name: 'Frances Bacon')
   end
 
-  it 'sends a list of merchants' do
+  it 'sends a specific merchant based on search parameters' do
     get api_v1_merchants_find_all_path(name: 'bob')
     merchants = JSON.parse(response.body, symbolize_names: true)[:data]
 
     expect(response).to be_successful
     expect(merchants[0][:attributes][:name]).to eq('Bob Bobbington')
+  end
 
+  it 'sends a list of multiple specific merchants based on search parameters' do
     get api_v1_merchants_find_all_path(name: 'ton')
     merchants = JSON.parse(response.body, symbolize_names: true)[:data]
 
     expect(response).to be_successful
+    expect(merchants.length).to eq(4)
     expect(merchants[0][:attributes][:name]).to eq('Bill Billington')
     expect(merchants[1][:attributes][:name]).to eq('Bob Bobbington')
     expect(merchants[2][:attributes][:name]).to eq('Jenn Jennington')

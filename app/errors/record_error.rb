@@ -4,7 +4,7 @@ class RecordError < StandardError
               :details,
               :status
 
-  def initialize(message = 'Content is Invalid', details = 'Record is Invalid', status = 400)
+  def initialize(message: 'Content is Invalid', details: 'Record is Invalid', status: 400)
     @details        = details
     @status         = status
     @exception_type = 'Records'

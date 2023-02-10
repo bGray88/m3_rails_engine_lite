@@ -12,64 +12,80 @@ RSpec.describe 'Items Find API' do
     @item5 = create(:item, unit_price: 65.50, name: 'Banjo', merchant_id: @merchant2.id)
   end
 
-  it 'sends an item based on search params name' do
-    get api_v1_items_find_path(name: 'Banjo')
-    item = JSON.parse(response.body, symbolize_names: true)[:data]
+  describe 'sends an item based on search params name' do
+    it 'can search based on full words' do
+      get api_v1_items_find_path(name: 'Banjo')
+      item = JSON.parse(response.body, symbolize_names: true)[:data]
 
-    expect(response).to be_successful
-    expect(item[:attributes][:name]).to eq('Banjo')
+      expect(response).to be_successful
+      expect(item[:attributes][:name]).to eq('Banjo')
+    end
 
-    get api_v1_items_find_path(name: 'baN')
-    item = JSON.parse(response.body, symbolize_names: true)[:data]
+    it 'can search based on partial words' do
+      get api_v1_items_find_path(name: 'ngo')
+      item = JSON.parse(response.body, symbolize_names: true)[:data]
 
-    expect(response).to be_successful
-    expect(item[:attributes][:name]).to eq('Banana')
+      expect(response).to be_successful
+      expect(item[:attributes][:name]).to eq('Dingo')
+    end
 
-    get api_v1_items_find_path(name: 'ngo')
-    item = JSON.parse(response.body, symbolize_names: true)[:data]
+    it 'can search based on partial and unusual cased formatting' do
+      get api_v1_items_find_path(name: 'baN')
+      item = JSON.parse(response.body, symbolize_names: true)[:data]
 
-    expect(response).to be_successful
-    expect(item[:attributes][:name]).to eq('Dingo')
+      expect(response).to be_successful
+      expect(item[:attributes][:name]).to eq('Banana')
+    end
 
-    get api_v1_items_find_path(name: '')
+    it 'will respond with accurate status code when invalid params data sent' do
+      get api_v1_items_find_path(name: '')
 
-    expect(response.status).to eq(400)
+      expect(response.status).to eq(400)
 
-    get api_v1_items_find_path
+      get api_v1_items_find_path
 
-    expect(response.status).to eq(400)
+      expect(response.status).to eq(400)
+    end
   end
 
-  it 'sends an item based on search params min_price and max_price' do
-    get api_v1_items_find_path(min_price: 10)
-    item = JSON.parse(response.body, symbolize_names: true)[:data]
+  describe 'sends an item based on search params name' do
+    it 'sends an item based on seperated search params min_price and max_price' do
+      get api_v1_items_find_path(min_price: 10)
+      item = JSON.parse(response.body, symbolize_names: true)[:data]
 
-    expect(response).to be_successful
-    expect(item[:attributes][:name]).to eq(@item1.name)
+      expect(response).to be_successful
+      expect(item[:attributes][:name]).to eq(@item1.name)
 
-    get api_v1_items_find_path(max_price: 10)
-    item = JSON.parse(response.body, symbolize_names: true)[:data]
+      get api_v1_items_find_path(max_price: 10)
+      item = JSON.parse(response.body, symbolize_names: true)[:data]
 
-    expect(response).to be_successful
-    expect(item[:attributes][:name]).to eq(@item3.name)
+      expect(response).to be_successful
+      expect(item[:attributes][:name]).to eq(@item3.name)
+    end
 
-    get api_v1_items_find_path(min_price: 26.50, max_price: 30.76)
-    item = JSON.parse(response.body, symbolize_names: true)[:data]
+    it 'sends an item based on combined search params min_price and max_price' do
+      get api_v1_items_find_path(min_price: 26.50, max_price: 30.76)
+      item = JSON.parse(response.body, symbolize_names: true)[:data]
 
-    expect(response).to be_successful
-    expect(item[:attributes][:name]).to eq(@item4.name)
+      expect(response).to be_successful
+      expect(item[:attributes][:name]).to eq(@item4.name)
+    end
 
-    get api_v1_items_find_path(min_price: 36.50, max_price: 30.76)
-    JSON.parse(response.body, symbolize_names: true)[:data]
+    it 'will respond with accurate status code when improper range values sent' do
+      get api_v1_items_find_path(min_price: 36.50, max_price: 30.76)
+      JSON.parse(response.body, symbolize_names: true)[:data]
 
-    expect(response.status).to eq(400)
+      expect(response.status).to eq(400)
+    end
 
-    get api_v1_items_find_path(min_price: '')
+    it 'will respond with accurate status code when invalid params data sent' do
+      get api_v1_items_find_path(min_price: '')
 
-    expect(response.status).to eq(400)
+      expect(response.status).to eq(400)
 
-    get api_v1_items_find_path
+      get api_v1_items_find_path
 
-    expect(response.status).to eq(400)
+      expect(response.status).to eq(400)
+    end
   end
 end

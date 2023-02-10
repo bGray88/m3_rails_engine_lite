@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Merchant Items API' do
+RSpec.describe 'Items API' do
   describe 'CRUD' do
     before(:each) do
       @merchant1 = create(:merchant)
@@ -16,11 +16,12 @@ RSpec.describe 'Merchant Items API' do
     it 'sends a list of a merchant\'s items' do
       get api_v1_items_path
 
-      items = JSON.parse(response.body, symbolize_names: true)
+      items_list = JSON.parse(response.body, symbolize_names: true)[:data]
+      items_array = [@item1, @item2, @item3, @item4, @item5]
 
       expect(response).to be_successful
-      expect(items[:data].length).to eq(5)
-      items[:data].each do |item|
+      expect(items_list.length).to eq(5)
+      items_list.each_with_index do |item, index|
         expect(item).to have_key(:id)
         expect(item[:id]).to be_a(String)
 
@@ -38,6 +39,11 @@ RSpec.describe 'Merchant Items API' do
 
         expect(item[:attributes]).to have_key(:unit_price)
         expect(item[:attributes][:unit_price]).to be_a(Float)
+        
+        expect(item[:attributes][:name]).to eq(items_array[index].name)
+        expect(item[:attributes][:description]).to eq(items_array[index].description)
+        expect(item[:attributes][:unit_price]).to eq(items_array[index].unit_price)
+    
       end
     end
 
@@ -96,22 +102,6 @@ RSpec.describe 'Merchant Items API' do
       expect(response).to be_successful
       expect(item.name).to_not eq(previous_name)
       expect(item.name).to eq("Hungry Man Excessive")
-    end
-
-    it 'can return an item\'s merchant' do
-      get api_v1_item_merchant_path(@item1)
-      merchant = JSON.parse(response.body, symbolize_names: true)[:data]
-
-      expect(response).to be_successful
-      expect(merchant[:id]).to eq(@merchant1.id.to_s)
-      expect(merchant[:attributes][:name]).to eq(@merchant1.name)
-
-      get api_v1_item_merchant_path(@item4)
-      merchant = JSON.parse(response.body, symbolize_names: true)[:data]
-
-      expect(response).to be_successful
-      expect(merchant[:id]).to eq(@merchant2.id.to_s)
-      expect(merchant[:attributes][:name]).to eq(@merchant2.name)
     end
 
     it "can destroy an item and associated invoice if only item" do

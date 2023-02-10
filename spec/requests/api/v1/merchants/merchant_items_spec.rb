@@ -15,11 +15,12 @@ RSpec.describe 'Merchant Items API' do
   it 'sends a list of a merchant\'s items' do
     get api_v1_merchant_items_path(@merchant1)
 
-    items = JSON.parse(response.body, symbolize_names: true)
+    items_list  = JSON.parse(response.body, symbolize_names: true)
+    items_array = [@item1, @item2, @item3, @item4, @item5]
 
     expect(response).to be_successful
-    expect(items[:data].length).to eq(3)
-    items[:data].each do |item|
+    expect(items_list[:data].length).to eq(3)
+    items_list[:data].each_with_index do |item, index|
       expect(item).to have_key(:id)
       expect(item[:id]).to be_a(String)
 
@@ -37,6 +38,10 @@ RSpec.describe 'Merchant Items API' do
 
       expect(item[:attributes]).to have_key(:unit_price)
       expect(item[:attributes][:unit_price]).to be_a(Float)
+
+      expect(item[:attributes][:name]).to eq(items_array[index].name)
+      expect(item[:attributes][:description]).to eq(items_array[index].description)
+      expect(item[:attributes][:unit_price]).to eq(items_array[index].unit_price)
     end
   end
 end
