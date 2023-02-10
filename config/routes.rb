@@ -10,10 +10,10 @@ Rails.application.routes.draw do
       end
 
       namespace :items do
-        constraints Constraint::FindByName.new do
+        constraints Constraints::FindByName.new do
           match 'find' => 'find_by_name#show', via: [:get]
         end
-        constraints Constraint::FindByPrice.new do
+        constraints Constraints::FindByPrice.new do
           match 'find' => 'find_by_price#show', via: [:get]
         end
         resource :find, only: [:show], controller: :find

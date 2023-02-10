@@ -7,29 +7,23 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def show
-    if @item
-      render json: ItemSerializer.format_item(@item)
-    else
-      render json: ErrorSerializer.errors_all([:no_content]), status: :not_found
-    end
+    raise RecordError.new(message: 'Item not found', details: 'Unable to process display', status: :not_found) unless @item
+
+    render json: ItemSerializer.format_item(@item)
   end
 
   def create
     item = Item.new(item_params)
-    if item.save
-      render json: ItemSerializer.format_item(Item.last), status: :created
-    else
-      render json: ErrorSerializer.errors_all([:no_content]), status: :conflict
-    end
+    raise RecordError.new(message: 'Item not saved', details: 'Unable to process create', status: :not_found) unless item.save
+
+    render json: ItemSerializer.format_item(Item.last), status: :created
   end
 
   def update
-    if @item && item_params[:merchant_id].nil? || @item && @merchant
-      Item.update(@item.id, item_params)
-      render json: ItemSerializer.format_item(Item.find_by(id: @item.id)), status: :ok
-    else
-      render json: ErrorSerializer.errors_all([:no_content]), status: :not_found
-    end
+    raise RecordError.new(message: 'Item not found', details: 'Unable to process update', status: :not_found) unless @item && item_params[:merchant_id].nil? || @item && @merchant
+
+    Item.update(@item.id, item_params)
+    render json: ItemSerializer.format_item(Item.find_by(id: @item.id)), status: :ok
   end
 
   def destroy

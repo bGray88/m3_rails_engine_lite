@@ -6,11 +6,9 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def show
-    if @merchant
-      render json: MerchantSerializer.format_merchant(@merchant)
-    else
-      render json: ErrorSerializer.errors_all([:no_content]), status: :not_found
-    end
+    raise RecordError.new(message: 'Item not found', details: 'Unable to process display', status: :not_found) unless @merchant
+
+    render json: MerchantSerializer.format_merchant(@merchant)
   end
 
   private

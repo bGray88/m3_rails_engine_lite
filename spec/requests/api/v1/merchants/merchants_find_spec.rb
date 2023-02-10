@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Items Find API' do
+RSpec.describe 'Merchants Find API' do
   before(:each) do
     @merchant1 = create(:merchant, name: 'Bob Bobbington')
     @merchant2 = create(:merchant, name: 'Sal Sallington')
@@ -9,7 +9,7 @@ RSpec.describe 'Items Find API' do
     @merchant5 = create(:merchant, name: 'Frances Bacon')
   end
 
-  it 'sends a list of a merchant\'s items' do
+  it 'sends a list of merchants' do
     get api_v1_merchants_find_all_path(name: 'bob')
     merchants = JSON.parse(response.body, symbolize_names: true)[:data]
 

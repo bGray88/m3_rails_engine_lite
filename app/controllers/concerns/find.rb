@@ -4,18 +4,14 @@ module Find
       params[key].to_i < 0 || params[key].to_i < 0
   end
 
+  def invalid_price_range?(min, max)
+    !max.nil? && (min.to_i > max.to_i)
+  end
+
   def price_range(min, max)
-    return [0.01..max.to_f, :desc] if min.nil?
-    return [min.to_f..Float::INFINITY, :asc] if max.nil?
-    return [min.to_f..max.to_f, :asc]
-  end
-
-  def find_by_price(search)
-    Item.find_item_by_price(search[0], search[1])
-  end
-
-  def find_by_name(search_term)
-    Item.find_item_by_name(search_term)
+    return { range: 0.01..max.to_f, direction: :desc } if min.nil?
+    return { range: min.to_f..Float::INFINITY, direction: :asc } if max.nil?
+    return { range: min.to_f..max.to_f, direction: :asc }
   end
 
   def render_item_json(item)
